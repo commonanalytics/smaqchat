@@ -1,5 +1,5 @@
 
-import FloatingChat from '@/components/FloatingChat';
+import { FloatingChat } from '@/components/FloatingChat';
 
 const Index = () => {
   return (
