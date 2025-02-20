@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FloatingChatProps, Message } from './types';
 import ChatBubble from './ChatBubble';
 import ChatWindow from './ChatWindow';
+import { useChat } from '@/hooks/useChat';
 
 const FloatingChat: React.FC<FloatingChatProps> = ({
   apiKey,
@@ -26,6 +27,8 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
     return [];
   });
 
+  const { sendMessage, isLoading } = useChat();
+
   const handleSendMessage = async (content: string) => {
     // Add user message
     const userMessage: Message = {
@@ -37,25 +40,7 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      // Make API call to the chat endpoint
-      const response = await fetch('http://localhost:8000/api/chats/ask-question/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-        body: JSON.stringify({
-          message: content,
-          db_connection_uuid: "67a45667ac63fe35fdaf41ee",
-          session_id: "67a45667ac63fe35fdaf41e5"
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get response from chat API');
-      }
-
-      const data = await response.json();
+      const data = await sendMessage({ message: content, apiKey });
       
       // Add bot response message
       const botMessage: Message = {
@@ -87,6 +72,7 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
           onSendMessage={handleSendMessage}
           theme={theme}
           placeholder={placeholder}
+          isLoading={isLoading}
         />
       )}
       <ChatBubble

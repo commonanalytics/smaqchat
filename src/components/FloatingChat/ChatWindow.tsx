@@ -12,9 +12,10 @@ interface ChatWindowProps {
     glassMorphism?: boolean;
   };
   placeholder?: string;
+  isLoading?: boolean;
 }
 
-const ChatWindow = ({ messages, onSendMessage, theme, placeholder }: ChatWindowProps) => {
+const ChatWindow = ({ messages, onSendMessage, theme, placeholder, isLoading }: ChatWindowProps) => {
   const [input, setInput] = React.useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -65,6 +66,17 @@ const ChatWindow = ({ messages, onSendMessage, theme, placeholder }: ChatWindowP
               </div>
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                </div>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
         
@@ -76,10 +88,17 @@ const ChatWindow = ({ messages, onSendMessage, theme, placeholder }: ChatWindowP
               onChange={(e) => setInput(e.target.value)}
               placeholder={placeholder || "Type your message..."}
               className="flex-1 rounded-lg border border-gray-200 px-4 py-2 focus:border-zinc-900 focus:outline-none"
+              disabled={isLoading}
             />
             <button
               type="submit"
-              className="rounded-lg bg-zinc-900 px-4 py-2 text-white transition-colors hover:bg-zinc-800"
+              className={cn(
+                "rounded-lg px-4 py-2 text-white transition-colors",
+                isLoading 
+                  ? "bg-zinc-400 cursor-not-allowed" 
+                  : "bg-zinc-900 hover:bg-zinc-800"
+              )}
+              disabled={isLoading}
             >
               Send
             </button>
