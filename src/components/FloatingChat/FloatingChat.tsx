@@ -36,18 +36,47 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
     };
     setMessages((prev) => [...prev, userMessage]);
 
-    // Here you would implement the actual API call using the apiKey
-    // For now, we'll just echo back the message
-    const botMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      content: `Received: ${content}`,
-      type: 'bot',
-      timestamp: Date.now(),
-    };
-    
-    setTimeout(() => {
+    try {
+      // Make API call to the chat endpoint
+      const response = await fetch('http://localhost:8000/api/chats/ask-question/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+        },
+        body: JSON.stringify({
+          message: content,
+          db_connection_uuid: "67a45667ac63fe35fdaf41ee",
+          session_id: "67a45667ac63fe35fdaf41e5"
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from chat API');
+      }
+
+      const data = await response.json();
+      
+      // Add bot response message
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: data.response || data.message || 'No response received',
+        type: 'bot',
+        timestamp: Date.now(),
+      };
+      
       setMessages((prev) => [...prev, botMessage]);
-    }, 1000);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      // Add error message to chat
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'Sorry, there was an error processing your message. Please try again.',
+        type: 'bot',
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   return (
