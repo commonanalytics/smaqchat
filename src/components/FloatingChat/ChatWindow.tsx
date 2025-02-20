@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Message } from './types';
 
@@ -16,6 +16,15 @@ interface ChatWindowProps {
 
 const ChatWindow = ({ messages, onSendMessage, theme, placeholder }: ChatWindowProps) => {
   const [input, setInput] = React.useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,10 +41,10 @@ const ChatWindow = ({ messages, onSendMessage, theme, placeholder }: ChatWindowP
         theme?.glassMorphism ? 'bg-white/80 backdrop-blur-lg' : 'bg-white',
         'animate-fade-in border border-gray-200'
       )}
-      style={{ maxHeight: 'calc(100vh - 160px)' }}
+      style={{ height: '600px', maxHeight: 'calc(100vh - 160px)' }}
     >
-      <div className="flex h-full flex-col">
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -56,9 +65,10 @@ const ChatWindow = ({ messages, onSendMessage, theme, placeholder }: ChatWindowP
               </div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         
-        <form onSubmit={handleSubmit} className="border-t p-4">
+        <form onSubmit={handleSubmit} className="border-t p-4 bg-white rounded-b-2xl">
           <div className="flex gap-2">
             <input
               type="text"
