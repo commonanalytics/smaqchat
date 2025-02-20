@@ -1,69 +1,55 @@
-# Welcome to your Lovable project
 
-## Project info
+# Floating Chat Component
 
-**URL**: https://lovable.dev/projects/91fe9342-0050-429a-9fc7-765ebfde7d0f
+A beautiful, customizable floating chat component for React applications.
 
-## How can I edit this code?
+## Usage
 
-There are several ways of editing your application.
+```jsx
+import { FloatingChat } from 'floating-chat';
+import 'floating-chat/styles.css';
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/91fe9342-0050-429a-9fc7-765ebfde7d0f) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+function App() {
+  return (
+    <FloatingChat
+      apiKey="your-api-key"
+      theme={{
+        primaryColor: 'bg-zinc-900',
+        glassMorphism: true,
+        bubbleSize: 'medium',
+      }}
+      initialMessage="Hello! How can I help you today?"
+    />
+  );
+}
 ```
 
-**Edit a file directly in GitHub**
+## Props
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Prop | Type | Description |
+|------|------|-------------|
+| apiKey | string | Your API key for the chat service |
+| theme | ChatTheme | Customize the appearance of the chat component |
+| initialMessage | string | First message shown in the chat |
+| placeholder | string | Placeholder text for the input field |
+| className | string | Additional CSS classes |
 
-**Use GitHub Codespaces**
+### Theme Options
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The `theme` prop accepts an object with the following properties:
 
-## What technologies are used for this project?
+```typescript
+interface ChatTheme {
+  primaryColor?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  fontFamily?: string;
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
+  bubbleSize?: 'small' | 'medium' | 'large';
+  glassMorphism?: boolean;
+}
+```
 
-This project is built with .
+## License
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/91fe9342-0050-429a-9fc7-765ebfde7d0f) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+MIT
