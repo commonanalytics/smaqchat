@@ -1,6 +1,9 @@
 export default {
   plugins: {
-    tailwindcss: {},
+    '@tailwindcss/postcss': {
+      content: ['./src/**/*.{js,jsx,ts,tsx}'],
+    },
+    'postcss-import': {},
     autoprefixer: {},
   },
 }
